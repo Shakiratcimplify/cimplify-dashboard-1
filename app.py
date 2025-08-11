@@ -4,16 +4,20 @@ import streamlit as st
 import plotly.graph_objects as go
 from streamlit_option_menu import option_menu
 
+
 # our helpers (already written earlier)
-from lib.data import load_all
+from data import load_all          # uses your 01.xlsx + optional 02_budget.xlsx and maps account_group correctly
 from metrics import kpis, monthly_pnl
 from charts import kpi_card_md, donut, line_two, waterfall_from_monthly, inject_watermark
+
 
 
 # --------------------
 # Page & watermark
 # --------------------
 st.set_page_config(page_title="Financial Performance", layout="wide")
+
+
 # Widen the main content container a bit
 st.markdown("""
 <style>
@@ -21,7 +25,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-inject_watermark(st, "assets/logo.png")
+inject_watermark(st, "logo.png")
 
 # --------------------
 # Load data (DO NOT edit your files)
@@ -313,7 +317,7 @@ if page == "Overview":
     st.plotly_chart(fig_rev_exp, use_container_width=True)
 
     # --- Expenses Breakdown (Monthly) ---
-    st.subheader("💸 Expenses Breakdown (Monthly)")
+    st.subheader(" Expenses Breakdown (Monthly)")
     exp_month = (
         DF[DF["account_group"].isin(["COGS", "OPEX"])]
         .groupby(["year", "month", "account_group"], as_index=False)["signed_amount"].sum()
@@ -377,7 +381,7 @@ if page == "Overview":
             )
             st.plotly_chart(fig_top5, use_container_width=True)
 
-            st.caption(f"🎯 Top 5 customers = **{top5_share:.1f}%** of revenue. "
+            st.caption(f" Top 5 customers = **{top5_share:.1f}%** of revenue. "
                        f"Others = ₦{others:,.0f}. "
                        f"If this % is high, revenue is concentrated (risk).")
 
@@ -436,7 +440,7 @@ if page == "Overview":
                     yaxis_title="Vendor"
                 )
                 st.plotly_chart(fig_vendors, use_container_width=True)
-                st.caption("📑 Consider re‑bids or framework agreements for your top vendors.")
+                st.caption(" Consider re‑bids or framework agreements for your top vendors.")
             else:
                 st.info("No classification/vendor columns to break down expenses.")
 
@@ -876,7 +880,7 @@ elif page == "Expenses":
 # STATEMENT OF PROFIT & LOSS (from 01.xlsx line items)
 # =========================================================================
 else:
-    st.title("Statement of Profit & Loss — ₦")
+    st.title("Statement of Profit & Loss ")
 
     # Ensure period columns exist
     if "year" not in DF.columns and "date" in DF.columns:
